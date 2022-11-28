@@ -37,6 +37,23 @@ class Rectangle
 
 inline Rectangle MBR(const Rectangle& rect) { return rect; }
 
+inline Rectangle MBR(const std::vector<Point>& points)
+{
+   auto comp_x = [](const Point& lhs, const Point& rhs)
+   {
+      return lhs.x < rhs.x;
+   };
+   auto comp_y = [](const Point& lhs, const Point& rhs)
+   {
+      return lhs.y < rhs.y;
+   };
+   auto [minx_point, maxx_point] = std::ranges::minmax_element(points, comp_x);
+   auto [miny_point, maxy_point] = std::ranges::minmax_element(points, comp_y);
+   return Rectangle {
+       {minx_point->x, miny_point->y},
+       {maxx_point->x, maxy_point->y}};
+}
+
 enum class LineType
 {
    Open,
@@ -61,20 +78,6 @@ using Polygon = PolyLine<LineType::Filled>;
 
 template <LineType type> inline Rectangle MBR(const PolyLine<type>& line)
 {
-   auto comp_x = [](const Point& lhs, const Point& rhs)
-   {
-      return lhs.x < rhs.x;
-   };
-   auto comp_y = [](const Point& lhs, const Point& rhs)
-   {
-      return lhs.y < rhs.y;
-   };
-   auto [minx_point, maxx_point] =
-       std::ranges::minmax_element(line.points(), comp_x);
-   auto [miny_point, maxy_point] =
-       std::ranges::minmax_element(line.points(), comp_y);
-   return Rectangle {
-       {minx_point->x, miny_point->y},
-       {maxx_point->x, maxy_point->y}};
+   return MBR(line.points());
 }
 } // namespace geo
