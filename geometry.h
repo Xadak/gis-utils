@@ -1,9 +1,11 @@
 #include <algorithm>
 #include <cassert>
 #include <initializer_list>
+#include <iterator>
 #include <numeric>
 #include <tuple>
 #include <vector>
+
 
 namespace geo
 {
@@ -54,6 +56,17 @@ inline Rectangle MBR(const std::vector<Point>& points)
        {maxx_point->x, maxy_point->y}};
 }
 
+struct Line
+{
+   Point start;
+   Point end;
+};
+
+inline Rectangle MBR(const Line& line)
+{
+   return MBR(std::vector {line.start, line.end});
+}
+
 enum class LineType
 {
    Open,
@@ -73,6 +86,21 @@ template <LineType type> class PolyLine
  private:
    std::vector<Point> _points;
 };
+
+template <LineType type>
+std::vector<Line> to_lines(const PolyLine<type> poly_line)
+{
+   std::vector<Line> res {};
+   std::transform(
+       std::begin(poly_line.points()),
+       std::end(poly_line.points()),
+       std::begin(poly_line.points()) + 1,
+       std::back_inserter(res),
+       [](const Point& start, const Point& end) {
+          return Line {start, end};
+       });
+   return res;
+}
 
 using Polygon = PolyLine<LineType::Filled>;
 
