@@ -13,4 +13,8 @@ endif()
 
 add_library(${PROJECT_NAME} rectangle.h line.h line.cpp)
 
+target_include_directories(${PROJECT_NAME} INTERFACE ${CMAKE_CURRENT_SOURCE_DIR})
+
 target_link_libraries(${PROJECT_NAME} project_options)
+
+add_subdirectory(test)
