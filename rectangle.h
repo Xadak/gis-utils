@@ -19,6 +19,11 @@ struct Point
    coord_t y;
 };
 
+inline bool operator==(const Point& lhs, const Point& rhs)
+{
+   return lhs.x == rhs.x and lhs.y == rhs.y;
+}
+
 bool lex_comp_less(const Point& lhs, const Point& rhs)
 {
    return std::tie(lhs.x, lhs.y) < std::tie(rhs.x, rhs.y);
@@ -41,6 +46,12 @@ class Rectangle
    Point _top_left;
    Point _bottom_right;
 };
+
+inline bool operator==(const Rectangle& lhs, const Rectangle& rhs)
+{
+   return lhs.topLeft() == rhs.topLeft()
+      and lhs.bottomRight() == rhs.bottomRight();
+}
 
 inline Rectangle MBR(const Rectangle& rect) { return rect; }
 
