@@ -1,6 +1,8 @@
 #include "rectangle.h"
 #include <optional>
 
+#ifndef LINE_H
+#define LINE_H
 namespace geo
 {
 
@@ -90,3 +92,4 @@ template <LineType type> inline Rectangle MBR(const PolyLine<type>& line)
    return MBR(line.points());
 }
 } // namespace geo
+#endif

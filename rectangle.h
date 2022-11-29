@@ -7,6 +7,8 @@
 #include <tuple>
 #include <vector>
 
+#ifndef RECTANGLE_H
+#define RECTANGLE_H
 namespace geo
 {
 using coord_t = double;
@@ -65,3 +67,4 @@ inline bool constains(const Rectangle& rect, const Point& p)
       and lex_comp_less(p, rect.bottomRight());
 }
 } // namespace geo
+#endif
