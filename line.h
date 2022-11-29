@@ -37,6 +37,15 @@ std::optional<Point> intersection(const Line& l1, const Line& l2)
    Point intersection {
        (lc2.c - lc1.c) / (lc1.a - lc2.a),
        (lc1.c * lc2.a - lc2.c * lc1.a) / (lc1.a - lc2.a)};
+
+   std::initializer_list points {l1.start, l1.end, l2.start, l2.end};
+   return constains(
+              Rectangle {
+                  std::min(points, &lex_comp_less),
+                  std::max(points, &lex_comp_less)},
+              intersection)
+            ? std::make_optional(intersection)
+            : std::nullopt;
 }
 
 enum class LineType
