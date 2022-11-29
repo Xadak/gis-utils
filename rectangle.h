@@ -36,7 +36,7 @@ class Rectangle
        : _top_left {std::move(top_left)}
        , _bottom_right {std::move(bottom_right)}
    {
-      assert(lex_comp_less(top_left, bottom_right));
+      assert(not lex_comp_less(bottom_right, top_left));
    }
 
    const Point& topLeft() const { return _top_left; }

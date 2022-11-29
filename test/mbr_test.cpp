@@ -18,4 +18,15 @@ TEST_CASE("MBR tests")
 
       CHECK(MBR(rect) == rect);
    }
+   SECTION("The MBR of a line is a rectangle to which the line is a diagonal")
+   {
+      using p = std::pair<Line, Rectangle>;
+      auto [line, rect] = GENERATE(
+          p {{{0, 2}, {2, 3}}, {{0, 2}, {2, 3}}},
+          p {{{3, 4}, {4, 0.234}}, {{3, 0.234}, {4, 4}}},
+          p {{{3, 4}, {2, 1}}, {{2, 1}, {3, 4}}},
+          p {{{0, 0}, {0, 0}}, {{0, 0}, {0, 0}}});
+
+      CHECK(MBR(line) == rect);
+   }
 }
