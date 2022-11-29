@@ -11,6 +11,6 @@ elseif(MSVC)
 target_compile_options(project_options INTERFACE /W3 /WX)
 endif()
 
-add_library(${PROJECT_NAME} geometry.h geometry.cpp)
+add_library(${PROJECT_NAME} geometry.h geometry.cpp line.h)
 
 target_link_libraries(${PROJECT_NAME} project_options)
