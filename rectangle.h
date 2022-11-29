@@ -1,5 +1,6 @@
 #include <algorithm>
 #include <cassert>
+#include <compare>
 #include <initializer_list>
 #include <iterator>
 #include <numeric>
@@ -16,6 +17,11 @@ struct Point
    coord_t y;
 };
 
+bool lex_comp_less(const Point& lhs, const Point& rhs)
+{
+   return std::tie(lhs.x, lhs.y) < std::tie(rhs.x, rhs.y);
+};
+
 class Rectangle
 {
  public:
@@ -23,9 +29,7 @@ class Rectangle
        : _top_left {std::move(top_left)}
        , _bottom_right {std::move(bottom_right)}
    {
-      assert(
-          std::tie(top_left.x, top_left.y)
-          <= std::tie(bottom_right.x, bottom_right.y));
+      assert(lex_comp_less(top_left, bottom_right));
    }
 
    const Point& topLeft() const { return _top_left; }
@@ -55,4 +59,9 @@ inline Rectangle MBR(const std::vector<Point>& points)
        {maxx_point->x, maxy_point->y}};
 }
 
+inline bool constains(const Rectangle& rect, const Point& p)
+{
+   return lex_comp_less(rect.topLeft(), p)
+      and lex_comp_less(p, rect.bottomRight());
+}
 } // namespace geo
