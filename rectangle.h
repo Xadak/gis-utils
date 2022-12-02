@@ -72,7 +72,7 @@ inline Rectangle MBR(const std::vector<Point>& points)
        {maxx_point->x, maxy_point->y}};
 }
 
-inline bool constains(const Rectangle& rect, const Point& p)
+inline bool contains(const Rectangle& rect, const Point& p)
 {
    return lex_comp_less(rect.topLeft(), p)
       and lex_comp_less(p, rect.bottomRight());

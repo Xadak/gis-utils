@@ -41,7 +41,7 @@ std::optional<Point> intersection(const Line& l1, const Line& l2)
        (lc1.c * lc2.a - lc2.c * lc1.a) / (lc1.a - lc2.a)};
 
    std::initializer_list points {l1.start, l1.end, l2.start, l2.end};
-   return constains(
+   return contains(
               Rectangle {
                   std::min(points, &lex_comp_less),
                   std::max(points, &lex_comp_less)},
