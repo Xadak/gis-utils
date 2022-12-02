@@ -1,3 +1,4 @@
+#include "point.h"
 #include <algorithm>
 #include <cassert>
 #include <compare>
@@ -7,27 +8,11 @@
 #include <tuple>
 #include <vector>
 
+
 #ifndef RECTANGLE_H
 #define RECTANGLE_H
 namespace geo
 {
-using coord_t = double;
-
-struct Point
-{
-   coord_t x;
-   coord_t y;
-};
-
-inline bool operator==(const Point& lhs, const Point& rhs)
-{
-   return lhs.x == rhs.x and lhs.y == rhs.y;
-}
-
-bool lex_comp_less(const Point& lhs, const Point& rhs)
-{
-   return std::tie(lhs.x, lhs.y) < std::tie(rhs.x, rhs.y);
-};
 
 class Rectangle
 {
