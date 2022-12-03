@@ -19,7 +19,7 @@ inline bool operator==(const Point& lhs, const Point& rhs)
    return lhs.x == rhs.x and lhs.y == rhs.y;
 }
 
-bool lex_comp_less(const Point& lhs, const Point& rhs)
+inline bool lex_comp_less(const Point& lhs, const Point& rhs)
 {
    return std::tie(lhs.x, lhs.y) < std::tie(rhs.x, rhs.y);
 };
@@ -31,7 +31,8 @@ enum class Orientation
    CCW,
 };
 
-Orientation orientation(const Point& p1, const Point& p2, const Point& p3)
+inline Orientation
+orientation(const Point& p1, const Point& p2, const Point& p3)
 {
    coord_t angle {
        (p2.y - p1.y) * (p3.x - p2.x) * (p2.x - p1.x) * (p3.y - p2.x)};
