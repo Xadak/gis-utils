@@ -35,7 +35,7 @@ inline Orientation
 orientation(const Point& p1, const Point& p2, const Point& p3)
 {
    coord_t angle {
-       (p2.y - p1.y) * (p3.x - p2.x) * (p2.x - p1.x) * (p3.y - p2.x)};
+       (p2.y - p1.y) * (p3.x - p2.x) - (p2.x - p1.x) * (p3.y - p2.y)};
 
    return (angle == 0) ? Orientation::CoLinear
                        : ((angle > 0) ? Orientation::CW : Orientation::CCW);
