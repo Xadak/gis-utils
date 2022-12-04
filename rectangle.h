@@ -8,7 +8,6 @@
 #include <tuple>
 #include <vector>
 
-
 #ifndef RECTANGLE_H
 #define RECTANGLE_H
 namespace geo
@@ -59,8 +58,8 @@ inline Rectangle MBR(const std::vector<Point>& points)
 
 inline bool contains(const Rectangle& rect, const Point& p)
 {
-   return lex_comp_less(rect.topLeft(), p)
-      and lex_comp_less(p, rect.bottomRight());
+   return (lex_comp_less(rect.topLeft(), p) or p == rect.topLeft())
+      and (lex_comp_less(p, rect.bottomRight()) or p == rect.bottomRight());
 }
 } // namespace geo
 #endif
