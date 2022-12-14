@@ -1,4 +1,5 @@
 #include "line.h"
+#include <set>
 
 bool geo::intersects(const Line& l1, const Line& l2)
 {
@@ -24,5 +25,90 @@ bool geo::intersects(const Line& l1, const Line& l2)
    if (o4 == Orientation::CoLinear and on_segment_when_colinear(l2, l1.end))
       return true;
 
+   return false;
+}
+
+// implements the Shamos-Hoey algorithm for checking if there exists an
+// intersection amongst n line segments
+bool geo::exists_intersection(const std::vector<Line>& segments)
+{
+   struct EndPoint
+   {
+      enum class Type : bool
+      {
+         Left,
+         Right,
+      };
+
+      const Point& point() const
+      {
+         return type == Type::Left ? segment->start : segment->end;
+      }
+
+      Type                              type;
+      std::vector<Line>::const_iterator segment;
+   };
+
+   std::vector<EndPoint> points {};
+   points.reserve(segments.size() * 2);
+   for (auto iter {std::begin(segments)}; iter != std::end(segments); ++iter)
+   {
+      points.push_back({EndPoint::Type::Left, iter});
+      points.push_back({EndPoint::Type::Right, iter});
+   }
+
+   std::ranges::sort(
+       points,
+       [](const EndPoint& lhs, const EndPoint& rhs)
+       {
+          return lhs.point() == rhs.point()
+                   ? lhs.type == EndPoint::Type::Left
+                   : lex_comp_less(lhs.point(), rhs.point());
+       });
+
+   auto is_above = [](const auto& lhs, const auto& rhs)
+   {
+      return rhs->start.y < lhs->start.y;
+   };
+   std::multiset<std::vector<Line>::const_iterator, decltype(is_above)>
+        encountered_lines {is_above};
+   auto above_or_below_intersects = [&encountered_lines](const auto& segment)
+   {
+      if (segment != std::begin(encountered_lines))
+      {
+         const auto above_segment {std::prev(segment)};
+         if (intersects(**above_segment, **segment))
+            return true;
+      }
+
+      if (segment != std::prev(std::end(encountered_lines)))
+      {
+         const auto below_segment {std::next(segment)};
+         if (intersects(**segment, **below_segment))
+            return true;
+      }
+      return false;
+   };
+   for (const auto& end_point : points)
+   {
+      switch (end_point.type)
+      {
+         case EndPoint::Type::Left: {
+            const auto inserted {encountered_lines.insert(end_point.segment)};
+
+            if (above_or_below_intersects(inserted))
+               return true;
+         }
+         break;
+         case EndPoint::Type::Right: {
+            const auto extracted {encountered_lines.find(end_point.segment)};
+            if (above_or_below_intersects(extracted))
+               return true;
+            encountered_lines.erase(extracted);
+         }
+         break;
+         default: throw;
+      }
+   }
    return false;
 }

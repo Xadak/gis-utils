@@ -8,6 +8,11 @@ namespace geo
 
 struct Line
 {
+   Line(Point start, Point end)
+       : start {lex_comp_less(start, end) ? std::move(start) : std::move(end)}
+       , end {lex_comp_less(start, end) ? std::move(end) : std::move(start)}
+   {}
+
    Point start;
    Point end;
 };
@@ -18,6 +23,8 @@ inline Rectangle MBR(const Line& line)
 }
 
 bool intersects(const Line& l1, const Line& l2);
+
+bool exists_intersection(const std::vector<Line>& lines);
 
 enum class LineType
 {
@@ -59,6 +66,17 @@ using Polygon = PolyLine<LineType::Filled>;
 template <LineType type> inline Rectangle MBR(const PolyLine<type>& line)
 {
    return MBR(line.points());
+}
+
+inline bool intersects(const Polygon& lhs, const Polygon& rhs)
+{
+   auto lhs_segments {to_lines(lhs)};
+   auto rhs_segments {to_lines(rhs)};
+   std::move(
+       std::begin(rhs_segments),
+       std::end(rhs_segments),
+       std::back_inserter(lhs_segments));
+   return exists_intersection(lhs_segments);
 }
 } // namespace geo
 #endif
