@@ -6,9 +6,9 @@
 namespace geo
 {
 
-struct Line
+struct LineSegment
 {
-   Line(Point start, Point end)
+   LineSegment(Point start, Point end)
        : start {lex_comp_less(start, end) ? std::move(start) : std::move(end)}
        , end {lex_comp_less(start, end) ? std::move(end) : std::move(start)}
    {}
@@ -17,14 +17,14 @@ struct Line
    Point end;
 };
 
-inline Rectangle MBR(const Line& line)
+inline Rectangle MBR(const LineSegment& line)
 {
    return MBR(std::vector {line.start, line.end});
 }
 
-bool intersects(const Line& l1, const Line& l2);
+bool intersects(const LineSegment& l1, const LineSegment& l2);
 
-bool exists_intersection(const std::vector<Line>& lines);
+bool exists_intersection(const std::vector<LineSegment>& lines);
 
 enum class LineType
 {
@@ -47,16 +47,16 @@ template <LineType type> class PolyLine
 };
 
 template <LineType type>
-std::vector<Line> to_lines(const PolyLine<type> poly_line)
+std::vector<LineSegment> to_lines(const PolyLine<type> poly_line)
 {
-   std::vector<Line> res {};
+   std::vector<LineSegment> res {};
    std::transform(
        std::begin(poly_line.points()),
        std::end(poly_line.points()),
        std::begin(poly_line.points()) + 1,
        std::back_inserter(res),
        [](const Point& start, const Point& end) {
-          return Line {start, end};
+          return LineSegment {start, end};
        });
    return res;
 }

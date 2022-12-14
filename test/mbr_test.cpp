@@ -20,7 +20,7 @@ TEST_CASE("MBR tests")
    }
    SECTION("The MBR of a line is a rectangle to which the line is a diagonal")
    {
-      using p = std::pair<Line, Rectangle>;
+      using p = std::pair<LineSegment, Rectangle>;
       auto [line, rect] = GENERATE(
           p {{{0, 2}, {2, 3}}, {{0, 2}, {2, 3}}},
           p {{{3, 4}, {4, 0.234}}, {{3, 0.234}, {4, 4}}},

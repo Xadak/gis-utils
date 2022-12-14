@@ -1,9 +1,10 @@
 #include "line.h"
 #include <set>
 
-bool geo::intersects(const Line& l1, const Line& l2)
+bool geo::intersects(const LineSegment& l1, const LineSegment& l2)
 {
-   auto on_segment_when_colinear = [](const Line& line, const Point& point)
+   auto on_segment_when_colinear =
+       [](const LineSegment& line, const Point& point)
    {
       return contains(MBR(line), point);
    };
@@ -30,7 +31,7 @@ bool geo::intersects(const Line& l1, const Line& l2)
 
 // implements the Shamos-Hoey algorithm for checking if there exists an
 // intersection amongst n line segments
-bool geo::exists_intersection(const std::vector<Line>& segments)
+bool geo::exists_intersection(const std::vector<LineSegment>& segments)
 {
    struct EndPoint
    {
@@ -45,8 +46,8 @@ bool geo::exists_intersection(const std::vector<Line>& segments)
          return type == Type::Left ? segment->start : segment->end;
       }
 
-      Type                              type;
-      std::vector<Line>::const_iterator segment;
+      Type                                     type;
+      std::vector<LineSegment>::const_iterator segment;
    };
 
    std::vector<EndPoint> points {};
@@ -70,7 +71,7 @@ bool geo::exists_intersection(const std::vector<Line>& segments)
    {
       return rhs->start.y < lhs->start.y;
    };
-   std::multiset<std::vector<Line>::const_iterator, decltype(is_above)>
+   std::multiset<std::vector<LineSegment>::const_iterator, decltype(is_above)>
         encountered_lines {is_above};
    auto above_or_below_intersects = [&encountered_lines](const auto& segment)
    {

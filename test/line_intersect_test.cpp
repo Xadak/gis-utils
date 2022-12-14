@@ -38,7 +38,7 @@ TEST_CASE("Orientation")
 
 TEST_CASE("Line segment intersection")
 {
-   using p = std::pair<Line, Line>;
+   using p = std::pair<LineSegment, LineSegment>;
    SECTION("non-parallel intersecting")
    {
       auto [l1, l2] = GENERATE(
@@ -81,7 +81,7 @@ TEST_CASE("Multi-segment intersection query")
 {
    SECTION("All parallel horizontal non-intersecting")
    {
-      std::vector<Line> segments {
+      std::vector<LineSegment> segments {
           {{0, 0}, {1, 0}},
           {{0, 1}, {2, 1}},
           {{1, 2.5}, {2, 2.5}},
@@ -91,7 +91,7 @@ TEST_CASE("Multi-segment intersection query")
    }
    SECTION("All parallel horizontal non-intersecting")
    {
-      std::vector<Line> segments {
+      std::vector<LineSegment> segments {
           {{0, 0}, {0, 1}},
           {{1, 0}, {1, 2}},
           {{2.5, 1}, {2.5, 2}},
@@ -101,7 +101,7 @@ TEST_CASE("Multi-segment intersection query")
    }
    SECTION("Two overlapping horizontal")
    {
-      std::vector<Line> segments {
+      std::vector<LineSegment> segments {
           {{0, 0}, {1, 0}},
           {{0.5, 0}, {2, 0}},
           {{10, 10}, {10, 12}},
@@ -111,7 +111,7 @@ TEST_CASE("Multi-segment intersection query")
    }
    SECTION("Two overlapping vertical")
    {
-      std::vector<Line> segments {
+      std::vector<LineSegment> segments {
           {{0, 0}, {0, 1}},
           {{0, 0.5}, {0, 2}},
           {{10, 10}, {10, 12}},
@@ -121,7 +121,7 @@ TEST_CASE("Multi-segment intersection query")
    }
    SECTION("Two intersecting on different end-points")
    {
-      std::vector<Line> segments {
+      std::vector<LineSegment> segments {
           {{0, 0}, {1, 0}},
           {{1, 0}, {2, 3}},
           {{10, 10}, {10, 12}},
@@ -131,7 +131,7 @@ TEST_CASE("Multi-segment intersection query")
    }
    SECTION("Two intersecting on left end-points")
    {
-      std::vector<Line> segments {
+      std::vector<LineSegment> segments {
           {{0, 0}, {1, 0}},
           {{0, 0}, {2, 3}},
           {{10, 10}, {10, 12}},
@@ -141,7 +141,7 @@ TEST_CASE("Multi-segment intersection query")
    }
    SECTION("Two intersecting on right end-points")
    {
-      std::vector<Line> segments {
+      std::vector<LineSegment> segments {
           {{0, 0}, {1, 0}},
           {{0, 3}, {1, 0}},
           {{10, 10}, {10, 12}},
@@ -151,7 +151,7 @@ TEST_CASE("Multi-segment intersection query")
    }
    SECTION("Two intersecting on non end-point")
    {
-      std::vector<Line> segments {
+      std::vector<LineSegment> segments {
           {{0, 0}, {1, 1}},
           {{0, 1}, {1, 0}},
           {{10, 10}, {10, 12}},
@@ -161,7 +161,7 @@ TEST_CASE("Multi-segment intersection query")
    }
    SECTION("three or more intersecting on non end-point")
    {
-      std::vector<Line> segments {
+      std::vector<LineSegment> segments {
           {{0, 0}, {1, 1}},
           {{0, 1}, {1, 0}},
           {{0.5, 1}, {0.5, 0}},
