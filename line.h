@@ -3,7 +3,7 @@
 
 #ifndef LINE_H
 #define LINE_H
-namespace geo
+namespace gis
 {
 
 struct LineSegment
@@ -81,5 +81,5 @@ inline bool intersects(const Polygon& lhs, const Polygon& rhs)
        std::back_inserter(lhs_segments));
    return exists_intersection(lhs_segments);
 }
-} // namespace geo
+} // namespace gis
 #endif

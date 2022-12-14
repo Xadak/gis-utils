@@ -3,7 +3,7 @@
 #include <catch.hpp>
 #include <tuple>
 
-using namespace geo;
+using namespace gis;
 TEST_CASE("Orientation")
 {
    using t = std::tuple<Point, Point, Point>;

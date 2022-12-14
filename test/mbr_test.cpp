@@ -5,7 +5,7 @@
 #include "rectangle.h"
 #include <catch.hpp>
 
-using namespace geo;
+using namespace gis;
 TEST_CASE("MBR tests")
 {
    SECTION("The MBR of a rectangle is identical to the rectangle")

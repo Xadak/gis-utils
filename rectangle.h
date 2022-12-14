@@ -10,7 +10,7 @@
 
 #ifndef RECTANGLE_H
 #define RECTANGLE_H
-namespace geo
+namespace gis
 {
 
 class Rectangle
@@ -66,5 +66,5 @@ inline bool intersects(const Rectangle& lhs, const Rectangle& rhs)
 {
    return contains(lhs, rhs.topLeft()) or contains(lhs, rhs.bottomRight());
 }
-} // namespace geo
+} // namespace gis
 #endif

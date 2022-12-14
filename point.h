@@ -4,7 +4,7 @@
 #ifndef POINT_H
 #define POINT_H
 
-namespace geo
+namespace gis
 {
 using coord_t = double;
 
@@ -40,5 +40,5 @@ orientation(const Point& p1, const Point& p2, const Point& p3)
    return (angle == 0) ? Orientation::CoLinear
                        : ((angle > 0) ? Orientation::CW : Orientation::CCW);
 }
-} // namespace geo
+} // namespace gis
 #endif

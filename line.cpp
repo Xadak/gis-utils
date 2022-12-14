@@ -1,7 +1,7 @@
 #include "line.h"
 #include <set>
 
-bool geo::intersects(const LineSegment& l1, const LineSegment& l2)
+bool gis::intersects(const LineSegment& l1, const LineSegment& l2)
 {
    auto on_segment_when_colinear =
        [](const LineSegment& line, const Point& point)
@@ -31,7 +31,7 @@ bool geo::intersects(const LineSegment& l1, const LineSegment& l2)
 
 // implements the Shamos-Hoey algorithm for checking if there exists an
 // intersection amongst n line segments
-bool geo::exists_intersection(const std::vector<LineSegment>& segments)
+bool gis::exists_intersection(const std::vector<LineSegment>& segments)
 {
    struct EndPoint
    {
