@@ -70,6 +70,9 @@ template <LineType type> inline Rectangle MBR(const PolyLine<type>& line)
 
 inline bool intersects(const Polygon& lhs, const Polygon& rhs)
 {
+   if (not intersects(MBR(lhs), MBR(rhs)))
+      return false;
+
    auto lhs_segments {to_lines(lhs)};
    auto rhs_segments {to_lines(rhs)};
    std::move(
