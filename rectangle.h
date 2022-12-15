@@ -17,13 +17,13 @@ class Rectangle
 {
  public:
    Rectangle(Point top_left, Point bottom_right)
-       : _top_left {std::move(top_left)}
-       , _bottom_right {std::move(bottom_right)}
-   {
-      assert(not lex_comp_less(bottom_right, top_left));
-   }
+       : _top_left {std::min(top_left.x, bottom_right.x), std::max(top_left.y, bottom_right.y)}
+       , _bottom_right {std::max(top_left.x, bottom_right.x), std::min(top_left.y, bottom_right.y)}
+   {}
 
    const Point& topLeft() const { return _top_left; }
+   Point        bottomLeft() const { return {_top_left.x, _bottom_right.y}; }
+   Point        topRight() const { return {_bottom_right.x, _top_left.y}; }
    const Point& bottomRight() const { return _bottom_right; }
 
  private:
@@ -58,8 +58,8 @@ inline Rectangle MBR(const std::vector<Point>& points)
 
 inline bool contains(const Rectangle& rect, const Point& p)
 {
-   return (lex_comp_less(rect.topLeft(), p) or p == rect.topLeft())
-      and (lex_comp_less(p, rect.bottomRight()) or p == rect.bottomRight());
+   return (not lex_comp_less(p, rect.bottomLeft()))
+      and (not lex_comp_less(rect.topRight(), p));
 }
 
 inline bool intersects(const Rectangle& lhs, const Rectangle& rhs)
