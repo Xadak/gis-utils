@@ -49,7 +49,9 @@ template <LineType type> class PolyLine
 template <LineType type>
 std::vector<LineSegment> to_lines(const PolyLine<type> poly_line)
 {
+   auto                     n_segments {std::ssize(poly_line.points()) - 1};
    std::vector<LineSegment> res {};
+   res.reserve(std::max(n_segments, 0ll));
    std::transform(
        std::begin(poly_line.points()),
        std::end(poly_line.points()),
