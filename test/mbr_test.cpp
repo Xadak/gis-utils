@@ -1,7 +1,7 @@
 #define CATCH_CONFIG_MAIN
 #define CATCH_CONFIG_RUNNER
 
-#include "line.h"
+#include "line_segment.h"
 #include "rectangle.h"
 #include <catch.hpp>
 

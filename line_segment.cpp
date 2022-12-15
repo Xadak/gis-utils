@@ -1,29 +1,29 @@
-#include "line.h"
+#include "line_segment.h"
 #include <set>
 
-bool gis::intersects(const LineSegment& l1, const LineSegment& l2)
+bool gis::intersects(const LineSegment& s1, const LineSegment& s2)
 {
    auto on_segment_when_colinear =
-       [](const LineSegment& line, const Point& point)
+       [](const LineSegment& segment, const Point& point)
    {
-      return contains(MBR(line), point);
+      return contains(MBR(segment), point);
    };
 
-   Orientation o1 {orientation(l1.start, l1.end, l2.start)};
-   Orientation o2 {orientation(l1.start, l1.end, l2.end)};
-   Orientation o3 {orientation(l2.start, l2.end, l1.start)};
-   Orientation o4 {orientation(l2.start, l2.end, l1.end)};
+   Orientation o1 {orientation(s1.start, s1.end, s2.start)};
+   Orientation o2 {orientation(s1.start, s1.end, s2.end)};
+   Orientation o3 {orientation(s2.start, s2.end, s1.start)};
+   Orientation o4 {orientation(s2.start, s2.end, s1.end)};
 
    if (o1 != o2 and o3 != o4)
       return true;
 
-   if (o1 == Orientation::CoLinear and on_segment_when_colinear(l1, l2.start))
+   if (o1 == Orientation::CoLinear and on_segment_when_colinear(s1, s2.start))
       return true;
-   if (o2 == Orientation::CoLinear and on_segment_when_colinear(l1, l2.end))
+   if (o2 == Orientation::CoLinear and on_segment_when_colinear(s1, s2.end))
       return true;
-   if (o3 == Orientation::CoLinear and on_segment_when_colinear(l2, l1.start))
+   if (o3 == Orientation::CoLinear and on_segment_when_colinear(s2, s1.start))
       return true;
-   if (o4 == Orientation::CoLinear and on_segment_when_colinear(l2, l1.end))
+   if (o4 == Orientation::CoLinear and on_segment_when_colinear(s2, s1.end))
       return true;
 
    return false;

@@ -17,9 +17,9 @@ struct LineSegment
    Point end;
 };
 
-inline Rectangle MBR(const LineSegment& line)
+inline Rectangle MBR(const LineSegment& segment)
 {
-   return MBR(std::vector {line.start, line.end});
+   return MBR(std::vector {segment.start, segment.end});
 }
 
 bool intersects(const LineSegment& l1, const LineSegment& l2);

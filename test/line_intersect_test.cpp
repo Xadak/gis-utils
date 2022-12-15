@@ -1,4 +1,4 @@
-#include "line.h"
+#include "line_segment.h"
 #include "point.h"
 #include <catch.hpp>
 #include <tuple>

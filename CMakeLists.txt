@@ -11,7 +11,7 @@ elseif(MSVC)
 target_compile_options(project_options INTERFACE /W3 /WX)
 endif()
 
-add_library(${PROJECT_NAME} point.h rectangle.h line.h line.cpp)
+add_library(${PROJECT_NAME} point.h rectangle.h line_segment.h line_segment.cpp)
 
 target_include_directories(${PROJECT_NAME} INTERFACE ${CMAKE_CURRENT_SOURCE_DIR})
 
