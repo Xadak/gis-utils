@@ -16,9 +16,9 @@ namespace gis
 class Rectangle
 {
  public:
-   Rectangle(Point top_left, Point bottom_right)
-       : _top_left {std::min(top_left.x, bottom_right.x), std::max(top_left.y, bottom_right.y)}
-       , _bottom_right {std::max(top_left.x, bottom_right.x), std::min(top_left.y, bottom_right.y)}
+   Rectangle(Point p1, Point p2)
+       : _top_left {std::min(p1.x, p2.x), std::max(p1.y, p2.y)}
+       , _bottom_right {std::max(p1.x, p2.x), std::min(p1.y, p2.y)}
    {}
 
    const Point& topLeft() const { return _top_left; }
