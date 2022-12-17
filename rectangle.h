@@ -56,6 +56,13 @@ inline Rectangle MBR(const std::vector<Point>& points)
        {maxx_point->x, maxy_point->y}};
 }
 
+inline coord_t area(const Rectangle& rect)
+{
+   auto top_right {rect.topRight()};
+   return (top_right.x - rect.topLeft().x)
+        * (rect.bottomRight().y - top_right.y);
+}
+
 inline bool contains(const Rectangle& rect, const Point& p)
 {
    return (not lex_comp_less(p, rect.bottomLeft()))
@@ -64,7 +71,25 @@ inline bool contains(const Rectangle& rect, const Point& p)
 
 inline bool intersects(const Rectangle& lhs, const Rectangle& rhs)
 {
-   return contains(lhs, rhs.topLeft()) or contains(lhs, rhs.bottomRight());
+   auto is_to_the_left_of = [](const Rectangle& rect, const Rectangle& other)
+   {
+      return rect.bottomRight().x < other.topLeft().y;
+   };
+   auto is_above = [](const Rectangle& rect, const Rectangle& other)
+   {
+      return rect.bottomRight().y > other.topLeft().y;
+   };
+   using p = std::pair<Rectangle, Rectangle>;
+   for (const auto& [rect, other] : {p {lhs, rhs}, p {rhs, lhs}})
+   {
+      if (area(other) == 0)
+         return false;
+      if (is_to_the_left_of(rect, other))
+         return false;
+      if (is_above(rect, other))
+         return false;
+   }
+   return true;
 }
 } // namespace gis
 #endif
