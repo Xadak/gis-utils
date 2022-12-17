@@ -47,8 +47,13 @@ template <LineType type> class PolyLine
 };
 
 template <LineType type>
-std::vector<LineSegment> to_lines(const PolyLine<type> poly_line)
+std::vector<LineSegment> to_segments(const PolyLine<type> poly_line)
 {
+   if (poly_line.points().empty())
+      return {};
+   if (std::ssize(poly_line.points()) < 2)
+      return {{poly_line.points().front(), poly_line.points().front()}};
+
    auto                     n_segments {std::ssize(poly_line.points()) - 1};
    std::vector<LineSegment> res {};
    res.reserve(std::max(n_segments, 0ll));
@@ -75,8 +80,8 @@ inline bool intersects(const Polygon& lhs, const Polygon& rhs)
    if (not intersects(MBR(lhs), MBR(rhs)))
       return false;
 
-   auto lhs_segments {to_lines(lhs)};
-   auto rhs_segments {to_lines(rhs)};
+   auto lhs_segments {to_segments(lhs)};
+   auto rhs_segments {to_segments(rhs)};
    std::move(
        std::begin(rhs_segments),
        std::end(rhs_segments),
