@@ -24,6 +24,11 @@ inline Rectangle MBR(const LineSegment& segment)
 
 bool intersects(const LineSegment& l1, const LineSegment& l2);
 
+inline std::vector<LineSegment> to_segments(const LineSegment& segment)
+{
+   return {segment};
+}
+
 bool exists_intersection(const std::vector<LineSegment>& lines);
 
 enum class LineType
