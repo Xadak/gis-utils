@@ -91,5 +91,9 @@ inline bool intersects(const Rectangle& lhs, const Rectangle& rhs)
    }
    return true;
 }
+
+struct LineSegment;
+
+std::vector<LineSegment> to_segments(const Rectangle& rect);
 } // namespace gis
 #endif
