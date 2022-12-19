@@ -58,6 +58,34 @@ std::vector<LineSegment> to_segments(const PolyLine<type> poly_line)
       return {};
    if (std::ssize(poly_line.points()) < 2)
       return {{poly_line.points().front(), poly_line.points().front()}};
+   if (std::ssize(poly_line.points()) == 2)
+      return {{poly_line.points().front(), poly_line.points().back()}};
+
+   auto                     n_segments {std::ssize(poly_line.points()) - 1};
+   std::vector<LineSegment> res {};
+   res.reserve(std::max(n_segments, 0ll));
+   std::transform(
+       std::begin(poly_line.points()),
+       std::end(poly_line.points()),
+       std::begin(poly_line.points()) + 1,
+       std::back_inserter(res),
+       [](const Point& start, const Point& end) {
+          return LineSegment {start, end};
+       });
+   res.push_back({poly_line.points().back(), poly_line.points().front()});
+   return res;
+}
+
+template <>
+inline std::vector<LineSegment>
+to_segments<LineType::Open>(const PolyLine<LineType::Open> poly_line)
+{
+   if (poly_line.points().empty())
+      return {};
+   if (std::ssize(poly_line.points()) < 2)
+      return {{poly_line.points().front(), poly_line.points().front()}};
+   if (std::ssize(poly_line.points()) == 2)
+      return {{poly_line.points().front(), poly_line.points().back()}};
 
    auto                     n_segments {std::ssize(poly_line.points()) - 1};
    std::vector<LineSegment> res {};
