@@ -108,7 +108,8 @@ template <LineType type> inline Rectangle MBR(const PolyLine<type>& line)
    return MBR(line.points());
 }
 
-inline bool intersects(const Polygon& lhs, const Polygon& rhs)
+template <LineType t1, LineType t2>
+inline bool intersects(const PolyLine<t1>& lhs, const PolyLine<t2>& rhs)
 {
    if (not intersects(MBR(lhs), MBR(rhs)))
       return false;
