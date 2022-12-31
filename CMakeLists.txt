@@ -11,7 +11,12 @@ elseif(MSVC)
 target_compile_options(project_options INTERFACE /W3 /WX)
 endif()
 
-add_library(${PROJECT_NAME} point.h rectangle.h rectangle.cpp line_segment.h line_segment.cpp geometry.h)
+add_library(${PROJECT_NAME} STATIC)
+
+target_sources(${PROJECT_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src/line_segment.cpp ${CMAKE_CURRENT_SOURCE_DIR}/src/rectangle.cpp)
+
+target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include/gis-utils)
+
 
 target_include_directories(${PROJECT_NAME} INTERFACE ${CMAKE_CURRENT_SOURCE_DIR})
 
