@@ -22,4 +22,8 @@ target_include_directories(${PROJECT_NAME} INTERFACE ${CMAKE_CURRENT_SOURCE_DIR}
 
 target_link_libraries(${PROJECT_NAME} project_options)
 
-add_subdirectory(test)
+option(build_tests DEFAULT OFF)
+
+if(build_tests)
+  add_subdirectory(test)
+endif()
