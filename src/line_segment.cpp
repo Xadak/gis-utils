@@ -1,4 +1,4 @@
-#include "line_segment.h"
+#include "gis-utils/line_segment.h"
 #include <set>
 
 bool gis::intersects(const LineSegment& s1, const LineSegment& s2)

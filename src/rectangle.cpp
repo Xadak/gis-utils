@@ -1,5 +1,5 @@
-#include "rectangle.h"
-#include "line_segment.h"
+#include "gis-utils/rectangle.h"
+#include "gis-utils/line_segment.h"
 
 std::vector<gis::LineSegment> gis::to_segments(const Rectangle& rect)
 {

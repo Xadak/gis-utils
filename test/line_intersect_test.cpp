@@ -1,5 +1,5 @@
-#include "line_segment.h"
-#include "point.h"
+#include "gis-utils/line_segment.h"
+#include "gis-utils/point.h"
 #include <catch.hpp>
 #include <tuple>
 
