@@ -51,11 +51,11 @@ You can check if a point is contained in a rectangle:
 assert(contains(gis::Rectangle{{1, 1}, {3, 3}}, gis::Point{2, 2}));
 ```
 ### LineSegment
-A line segment is defined by two points. Of the given points, the one that is lexicographically less than the other is considered the start and the other the end:
+A line segment is defined by two points.
 ```
 LineSegment segment{{2, 1}, {1, 1}};
-assert(segment.start == {1, 1});
-assert(segment.end == {2, 1});
+assert(segment.start == {2, 1});
+assert(segment.end == {1, 1});
 ```
 ### PolyLine
 A poly-line is defined by a collection of points. Depending on the LineType passed as a template parameter, a poly-line can be open, closed or filled (Polygon is an alias of PolyLine\<Filled>):

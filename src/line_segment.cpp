@@ -43,7 +43,13 @@ bool gis::exists_intersection(const std::vector<LineSegment>& segments)
 
       const Point& point() const
       {
-         return type == Type::Left ? segment->start : segment->end;
+         auto smaller_x = [](const Point& lhs, const Point& rhs)
+         {
+            return lhs.x < rhs.x;
+         };
+         return type == Type::Left
+                  ? std::min(segment->start, segment->end, smaller_x)
+                  : std::max(segment->start, segment->end, smaller_x);
       }
 
       Type                                     type;

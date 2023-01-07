@@ -9,8 +9,8 @@ namespace gis
 struct LineSegment
 {
    LineSegment(Point start, Point end)
-       : start {lex_comp_less(start, end) ? std::move(start) : std::move(end)}
-       , end {lex_comp_less(start, end) ? std::move(end) : std::move(start)}
+       : start {std::move(start)}
+       , end {std::move(end)}
    {}
 
    Point start;
