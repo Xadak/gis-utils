@@ -126,26 +126,25 @@ inline bool intersects(const PolyLine<t1>& lhs, const PolyLine<t2>& rhs)
 template <LineType type>
 bool contains(const PolyLine<type>& poly_line, const Point& point)
 {
+   auto crosses_upwards_on_y =
+       [](const LineSegment& segment, const Point& point)
+   {
+      return segment.start.y <= point.y and segment.end.y > point.y;
+   };
+   auto crosses_downwards_on_y =
+       [](const LineSegment& segment, const Point& point)
+   {
+      return segment.end.y <= point.y and segment.start.y > point.y;
+   };
+
    int64_t winding_count {0};
    for (const auto& segment : to_segments(poly_line))
    {
-      auto crosses_upwards_on_y =
-          [](const LineSegment& segment, const Point& point)
-      {
-         return segment.start.y <= point.y and segment.end.y > point.y;
-      };
-      auto crosses_downwards_on_y =
-          [](const LineSegment& segment, const Point& point)
-      {
-         return segment.end.y <= point.y and segment.start.y > point.y;
-      };
-
-      winding_count += (crosses_upwards_on_y(segment, point)
-                        and orientation(segment.start, segment.end, point)
-                                == Orientation::CCW)
-                     - (crosses_downwards_on_y(segment, point)
-                        and orientation(segment.start, segment.end, point)
-                                == Orientation::CW);
+      winding_count +=
+          (crosses_upwards_on_y(segment, point)
+           and (orientation(segment.start, segment.end, point) == Orientation::CCW))
+          - (crosses_downwards_on_y(segment, point)
+             and (orientation(segment.start, segment.end, point) == Orientation::CW));
    }
    return winding_count != 0;
 }
