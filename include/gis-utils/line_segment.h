@@ -66,7 +66,7 @@ std::vector<LineSegment> to_segments(const PolyLine<type> poly_line)
    res.reserve(std::max(n_segments, 0ll));
    std::transform(
        std::begin(poly_line.points()),
-       std::end(poly_line.points()),
+       std::end(poly_line.points()) - 1,
        std::begin(poly_line.points()) + 1,
        std::back_inserter(res),
        [](const Point& start, const Point& end) {
@@ -121,6 +121,41 @@ inline bool intersects(const PolyLine<t1>& lhs, const PolyLine<t2>& rhs)
        std::end(rhs_segments),
        std::back_inserter(lhs_segments));
    return exists_intersection(lhs_segments);
+}
+
+template <LineType type>
+bool contains(const PolyLine<type>& poly_line, const Point& point)
+{
+   int64_t winding_count {0};
+   for (const auto& segment : to_segments(poly_line))
+   {
+      auto crosses_upwards_on_y =
+          [](const LineSegment& segment, const Point& point)
+      {
+         return segment.start.y <= point.y and segment.end.y > point.y;
+      };
+      auto crosses_downwards_on_y =
+          [](const LineSegment& segment, const Point& point)
+      {
+         return segment.end.y <= point.y and segment.start.y > point.y;
+      };
+
+      winding_count += (crosses_upwards_on_y(segment, point)
+                        and orientation(segment.start, segment.end, point)
+                                == Orientation::CCW)
+                     - (crosses_downwards_on_y(segment, point)
+                        and orientation(segment.start, segment.end, point)
+                                == Orientation::CW);
+   }
+   return winding_count != 0;
+}
+
+template <>
+inline bool contains<LineType::Open>(
+    const PolyLine<LineType::Open>& poly_line,
+    const Point&                    point)
+{
+   return false;
 }
 } // namespace gis
 #endif
