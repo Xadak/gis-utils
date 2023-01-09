@@ -20,6 +20,11 @@ struct LineSegment
    std::array<Point, 2> points() const { return {start, end}; }
 };
 
+inline bool operator==(const LineSegment& lhs, const LineSegment& rhs)
+{
+   return lhs.points() == rhs.points();
+}
+
 coord_t min_distance(const LineSegment& s, const Point& p);
 
 inline Rectangle MBR(const LineSegment& segment)
@@ -62,6 +67,12 @@ template <LineType type> class PolyLine
  private:
    std::vector<Point> _points;
 };
+
+template <LineType t1, LineType t2>
+inline bool operator==(const PolyLine<t1>& lhs, const PolyLine<t2>& rhs)
+{
+   return t1 == t2 and lhs.points() == rhs.points();
+}
 
 template <LineType type>
 std::vector<LineSegment> to_segments(const PolyLine<type> poly_line)
