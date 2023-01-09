@@ -36,5 +36,20 @@ inline bool intersects(const Geometry& lhs, const Geometry& rhs)
        std::back_inserter(lhs_segments));
    return exists_intersection(lhs_segments);
 }
+
+inline bool contains(const Geometry& lhs, const Geometry& rhs)
+{
+   auto contains_at_least_one_point = [](auto&& lhs, auto&& rhs)
+   {
+      return std::ranges::any_of(
+          rhs.points(),
+          [&](auto&& point) { return contains(lhs, point); });
+   };
+
+   if (not contains(MBR(lhs), MBR(rhs)))
+      return false;
+   return not intersects(lhs, rhs)
+      and std::visit(contains_at_least_one_point, lhs, rhs);
+}
 } // namespace gis
 #endif

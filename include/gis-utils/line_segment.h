@@ -1,4 +1,5 @@
 #include "rectangle.h"
+#include <array>
 #include <optional>
 
 #ifndef LINE_H
@@ -15,6 +16,8 @@ struct LineSegment
 
    Point start;
    Point end;
+
+   std::array<Point, 2> points() const { return {start, end}; }
 };
 
 coord_t min_distance(const LineSegment& s, const Point& p);
@@ -22,6 +25,13 @@ coord_t min_distance(const LineSegment& s, const Point& p);
 inline Rectangle MBR(const LineSegment& segment)
 {
    return MBR(std::vector {segment.start, segment.end});
+}
+
+inline bool contains(const LineSegment& segment, const Point& point)
+{
+   return orientation(segment.start, segment.end, point)
+           == Orientation::CoLinear
+      and contains(MBR(segment), point);
 }
 
 bool intersects(const LineSegment& l1, const LineSegment& l2);

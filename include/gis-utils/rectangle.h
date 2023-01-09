@@ -1,10 +1,12 @@
 #include "point.h"
 #include <algorithm>
+#include <array>
 #include <cassert>
 #include <compare>
 #include <initializer_list>
 #include <iterator>
 #include <numeric>
+#include <ranges>
 #include <tuple>
 #include <vector>
 
@@ -25,6 +27,11 @@ class Rectangle
    Point        bottomLeft() const { return {_top_left.x, _bottom_right.y}; }
    Point        topRight() const { return {_bottom_right.x, _top_left.y}; }
    const Point& bottomRight() const { return _bottom_right; }
+
+   std::array<Point, 4> points() const
+   {
+      return {topLeft(), topRight(), bottomLeft(), bottomRight()};
+   }
 
  private:
    Point _top_left;
@@ -90,6 +97,14 @@ inline bool intersects(const Rectangle& lhs, const Rectangle& rhs)
          return false;
    }
    return true;
+}
+
+inline bool contains(const Rectangle& lhs, const Rectangle& rhs)
+{
+   return not intersects(lhs, rhs)
+      and std::ranges::any_of(
+          rhs.points(),
+          [&](auto&& point) { return contains(lhs, point); });
 }
 
 struct LineSegment;
