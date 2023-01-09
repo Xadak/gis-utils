@@ -1,5 +1,21 @@
 #include "gis-utils/line_segment.h"
+#include <numeric>
 #include <set>
+
+gis::coord_t gis::min_distance(const LineSegment& s, const Point& p)
+{
+   auto segment_length_squared {distance_squared(s.end, s.start)};
+   if (segment_length_squared == 0)
+      return distance(s.start, p);
+
+   auto projection_factor {std::clamp<coord_t>(
+       0,
+       dot_product(p - s.start, s.end - s.start) / segment_length_squared,
+       1)};
+
+   auto projection {s.start + projection_factor * (s.end - s.start)};
+   return distance(projection, p);
+}
 
 bool gis::intersects(const LineSegment& s1, const LineSegment& s2)
 {
@@ -43,7 +59,7 @@ bool gis::exists_intersection(const std::vector<LineSegment>& segments)
 
       const Point& point() const
       {
-                  return type == Type::Left
+         return type == Type::Left
                   ? std::min(segment->start, segment->end, &lex_comp_less)
                   : std::max(segment->start, segment->end, &lex_comp_less);
       }

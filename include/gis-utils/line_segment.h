@@ -17,6 +17,8 @@ struct LineSegment
    Point end;
 };
 
+coord_t min_distance(const LineSegment& s, const Point& p);
+
 inline Rectangle MBR(const LineSegment& segment)
 {
    return MBR(std::vector {segment.start, segment.end});
