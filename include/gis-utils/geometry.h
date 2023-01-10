@@ -51,5 +51,58 @@ inline bool contains(const Geometry& lhs, const Geometry& rhs)
    return not intersects(lhs, rhs)
       and std::visit(contains_at_least_one_point, lhs, rhs);
 }
+
+inline bool contains(const Geometry& g, const Point& p)
+{
+   return std::visit(
+       [&p](auto&& geometry) { return contains(geometry, p); },
+       g);
+}
+
+inline coord_t min_distance(const Geometry& g, const Point& p)
+{
+   if (contains(g, p))
+      return 0;
+
+   return std::ranges::min(
+       to_segments(g)
+       | std::views::transform([&](const LineSegment& segment)
+                               { return min_distance(segment, p); }));
+}
+
+inline coord_t min_distance(const Geometry& lhs, const Geometry& rhs)
+{
+   if (contains(lhs, rhs) or contains(rhs, lhs) or intersects(lhs, rhs)
+       or lhs == rhs)
+      return 0;
+
+   auto min_dist_from_lhs_vert_to_rhs = [](const auto& lhs,
+                                           const auto& rhs) -> coord_t
+   {
+      auto rhs_segments {to_segments(rhs)};
+      auto distances_from_verts =
+          lhs.points()
+          | std::views::transform(
+              [&](const auto& point)
+              {
+                 return std::ranges::min(
+                     rhs_segments
+                     | std::views::transform(
+                         [&](const LineSegment& segment)
+                         { return min_distance(segment, point); }));
+              });
+      return std::ranges::min(distances_from_verts);
+   };
+
+   return std::visit(
+       [=](const auto& lhs, const auto& rhs) -> coord_t
+       {
+          return std::ranges::min(
+              min_dist_from_lhs_vert_to_rhs(lhs, rhs),
+              min_dist_from_lhs_vert_to_rhs(rhs, lhs));
+       },
+       lhs,
+       rhs);
+}
 } // namespace gis
 #endif
