@@ -9,8 +9,7 @@ gis::coord_t gis::min_distance(const LineSegment& s, const Point& p)
       return distance(s.start, p);
 
    auto projection_factor {std::clamp<coord_t>(
-       0,
-       dot_product(p - s.start, s.end - s.start) / segment_length_squared,
+       dot_product(p - s.start, s.end - s.start) / segment_length_squared, 0,
        1)};
 
    auto projection {s.start + projection_factor * (s.end - s.start)};
