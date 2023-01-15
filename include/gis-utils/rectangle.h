@@ -72,15 +72,19 @@ inline coord_t area(const Rectangle& rect)
 
 inline bool contains(const Rectangle& rect, const Point& p)
 {
-   return (not lex_comp_less(p, rect.bottomLeft()))
-      and (not lex_comp_less(rect.topRight(), p));
+   auto down_and_or_to_the_left_of = [](const Point& p1, const Point& p2)
+   {
+      return p1.x < p2.x or p1.y < p2.y;
+   };
+   return (not down_and_or_to_the_left_of(p, rect.bottomLeft()))
+      and (not down_and_or_to_the_left_of(rect.topRight(), p));
 }
 
 inline bool intersects(const Rectangle& lhs, const Rectangle& rhs)
 {
    auto is_to_the_left_of = [](const Rectangle& rect, const Rectangle& other)
    {
-      return rect.bottomRight().x < other.topLeft().y;
+      return rect.bottomRight().x < other.topLeft().x;
    };
    auto is_above = [](const Rectangle& rect, const Rectangle& other)
    {
