@@ -115,7 +115,7 @@ to_segments<LineType::Open>(const PolyLine<LineType::Open> poly_line)
    res.reserve(std::max(n_segments, 0ll));
    std::transform(
        std::begin(poly_line.points()),
-       std::end(poly_line.points()),
+       std::prev(std::end(poly_line.points())),
        std::begin(poly_line.points()) + 1,
        std::back_inserter(res),
        [](const Point& start, const Point& end) {
