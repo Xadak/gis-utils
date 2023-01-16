@@ -37,7 +37,12 @@ inline bool intersects(const Geometry& lhs, const Geometry& rhs)
    return exists_intersection(lhs_segments);
 }
 
-inline bool contains(const Geometry& lhs, const Geometry& rhs)
+// optional bool parameter exists as an optimization to save an intersection
+// check if we know the geometries don't intersect beforehand
+inline bool contains(
+    const Geometry& lhs,
+    const Geometry& rhs,
+    bool            certainly_dont_intersect = false)
 {
    auto contains_at_least_one_point = [](auto&& lhs, auto&& rhs)
    {
@@ -48,7 +53,7 @@ inline bool contains(const Geometry& lhs, const Geometry& rhs)
 
    if (not contains(MBR(lhs), MBR(rhs)))
       return false;
-   return not intersects(lhs, rhs)
+   return (certainly_dont_intersect or not intersects(lhs, rhs))
       and std::visit(contains_at_least_one_point, lhs, rhs);
 }
 
@@ -103,6 +108,25 @@ inline coord_t min_distance(const Geometry& lhs, const Geometry& rhs)
        },
        lhs,
        rhs);
+}
+
+enum class SpatialRelationship
+{
+   Disjoint,
+   Intersecting,
+   AContainsB,
+   BContainsA,
+};
+
+SpatialRelationship spacial_relationship(const Geometry& a, const Geometry& b)
+{
+   if (intersects(a, b))
+      return SpatialRelationship::Intersecting;
+   if (contains(a, b, true))
+      return SpatialRelationship::AContainsB;
+   if (contains(b, a, true))
+      return SpatialRelationship::BContainsA;
+   return SpatialRelationship::Disjoint;
 }
 } // namespace gis
 #endif
