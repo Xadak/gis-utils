@@ -75,10 +75,28 @@ inline coord_t min_distance(const Geometry& g, const Point& p)
                                { return min_distance(segment, p); }));
 }
 
+enum class SpatialRelationship
+{
+   Disjoint,
+   Intersecting,
+   AContainsB,
+   BContainsA,
+};
+
+SpatialRelationship spatial_relationship(const Geometry& a, const Geometry& b)
+{
+   if (intersects(a, b))
+      return SpatialRelationship::Intersecting;
+   if (contains(a, b, true))
+      return SpatialRelationship::AContainsB;
+   if (contains(b, a, true))
+      return SpatialRelationship::BContainsA;
+   return SpatialRelationship::Disjoint;
+}
+
 inline coord_t min_distance(const Geometry& lhs, const Geometry& rhs)
 {
-   if (contains(lhs, rhs) or contains(rhs, lhs) or intersects(lhs, rhs)
-       or lhs == rhs)
+   if (spatial_relationship(lhs, rhs) != SpatialRelationship::Disjoint)
       return 0;
 
    auto min_dist_from_lhs_vert_to_rhs = [](const auto& lhs,
@@ -108,25 +126,6 @@ inline coord_t min_distance(const Geometry& lhs, const Geometry& rhs)
        },
        lhs,
        rhs);
-}
-
-enum class SpatialRelationship
-{
-   Disjoint,
-   Intersecting,
-   AContainsB,
-   BContainsA,
-};
-
-SpatialRelationship spacial_relationship(const Geometry& a, const Geometry& b)
-{
-   if (intersects(a, b))
-      return SpatialRelationship::Intersecting;
-   if (contains(a, b, true))
-      return SpatialRelationship::AContainsB;
-   if (contains(b, a, true))
-      return SpatialRelationship::BContainsA;
-   return SpatialRelationship::Disjoint;
 }
 } // namespace gis
 #endif
