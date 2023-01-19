@@ -1,5 +1,5 @@
 
-# GIS Primitives
+# GIS-UTILS
 
 A library providing basic primitives for use in gis applications.
 
